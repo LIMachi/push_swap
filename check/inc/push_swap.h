@@ -6,7 +6,7 @@
 /*   By: hmartzol <hmartzol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/16 06:01:14 by hmartzol          #+#    #+#             */
-/*   Updated: 2017/11/19 22:16:48 by hmartzol         ###   ########.fr       */
+/*   Updated: 2018/01/14 17:30:23 by hmartzol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <stdio.h>
 # include <unistd.h>
 # include <libft.h>
+# include <libftx.h>
 # include <ft_getopt.h>
 
 typedef struct			s_bistack
@@ -74,9 +75,13 @@ typedef struct			s_ps_env
 
 # define VERBOSE		1
 # define COLOR			2
+# define GRAPHICAL		4
 
 int						action(t_ps_env *s, int act);
 int						print(t_bistack *s);
 int						test_full_sort(t_bistack *s);
+t_ps_env				*env(void);
+
+int						print_action(t_ps_env *e, int act);
 
 #endif

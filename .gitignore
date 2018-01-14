@@ -1,5 +1,8 @@
 *.o
 *.d
+*.a
 .obj
 .dep
 .DS_Store
+checker
+push_swap
