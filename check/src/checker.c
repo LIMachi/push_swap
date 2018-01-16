@@ -6,7 +6,7 @@
 /*   By: hmartzol <hmartzol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/18 05:37:08 by hmartzol          #+#    #+#             */
-/*   Updated: 2018/01/14 17:33:18 by hmartzol         ###   ########.fr       */
+/*   Updated: 2018/01/14 18:40:05 by hmartzol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static int		h(char *name)
 	return (0);
 }
 
-static void		get_args(int argc, char **argv)
+static void		get_args(int argc, char **argv, t_ps_env *e)
 {
 	t_getopt_env		ge;
 	int					r;
@@ -35,26 +35,25 @@ static void		get_args(int argc, char **argv)
 	ge = ft_getopt_env("hv::f:cg", longopts);
 	while ((r = ft_getopt(argc, argv, &ge)) != -1)
 		if (r == 'c' || r == 'v' || r == 'h')
-			(r == 'h' && h(argv[0])) ||
-				(env()->opt |= r == 'c' ? COLOR : VERBOSE);
+			(r == 'h' && h(argv[0])) || (e->opt |= r == 'c' ? COLOR : VERBOSE);
 		else if (r == 'g')
-			env()->opt |= GRAPHICAL;
+			e->opt |= GRAPHICAL;
 		else if (r == 'f')
-			if ((env()->fd = open(ge.optarg, O_RDONLY)) == -1)
+			if ((e->fd = open(ge.optarg, O_RDONLY)) == -1)
 				exit(_(ft_printf("can't open file: '%s'\n", ge.optarg), 0));
 	if (!(argc - ge.optind))
 		exit(_(ft_printf("\n"), 0));
-	env()->b.s = argc - ge.optind;
-	if ((env()->b.d = (int*)ft_malloc(sizeof(int) * env()->b.s)) == NULL)
+	e->b.s = argc - ge.optind;
+	if ((e->b.d = (int*)ft_malloc(sizeof(int) * e->b.s)) == NULL)
 		exit(_(ft_printf("failled to alocate the stack\n"), 0));
-	env()->b.m = 0;
+	e->b.m = 0;
 	while (ge.optind < argc)
-		if (!ft_eval_int_ll(env()->b.d[env()->b.m++] =
+		if (!ft_eval_int_ll(e->b.d[e->b.m++] =
 			ft_strtoll(argv[ge.optind++], &ge.nextchar, 10)) || *ge.nextchar)
 			exit(_(ft_printf("Error\n"), 0));
 }
 
-static int		get_code(int fd)
+int				get_code(int fd)
 {
 	static const char	*t[17][2] = {{"sa", (char*)SA}, {"sb", (char*)SB},
 		{"ss", (char*)SS}, {"ra", (char*)RA}, {"rb", (char*)RB},
@@ -79,36 +78,30 @@ static int		get_code(int fd)
 	return (-1);
 }
 
-static int		action_cycle(t_ftx_data *data)
+void			closer(void)
 {
-	int c;
-
-	if ((c = get_code(env()->fd)) > 0)
-	{
-		action(env(), c);
-		if (data)
-			print_action(env(), c);
-		return (c);
-	}
-	if (!c)
-		return (0);
-	ft_printf("Error\n");
-	while (read(env()->fd, &c, sizeof(int)) > 0)
-		;
-	exit(0);
-	return (0);
+	ft_putstr(test_full_sort(&env()->b) ? "OK\n" : "KO\n");
 }
 
 int				main(int argc, char **argv, char **menv)
 {
-	t_window		*win;
+	int		s;
+	size_t	i;
 
 	ft_env_init(menv);
-	get_args(argc, argv);
+	ft_atend(&closer);
+	get_args(argc + (s = 0), argv, env());
+	i = -1;
+	while (++i < env()->b.s)
+		if (env()->b.d[i] < 0)
+			s = s > -env()->b.d[i] ? s : -env()->b.d[i];
+		else
+			s = s > env()->b.d[i] ? s : env()->b.d[i];
+	s = s < 200 ? 200 : s;
 	if (env()->opt & GRAPHICAL)
 	{
-		if ((win = ftx_new_window(ft_point(1920, 1080), "checker",
-									(const uint64_t *)"checker")) == NULL)
+		if ((env()->win = ftx_new_window(ft_point(s * 2 + 1, env()->b.s < 100 ?
+			100 : env()->b.s), "checker", (const uint64_t *)"checker")) == NULL)
 			return (0);
 		ftx_loop_hook(action_cycle);
 		ftx_start();
@@ -116,6 +109,5 @@ int				main(int argc, char **argv, char **menv)
 	else
 		while (action_cycle(NULL))
 			;
-	ft_putstr(test_full_sort(&env()->b) ? "OK\n" : "KO\n");
 	return (0);
 }

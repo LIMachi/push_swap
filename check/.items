@@ -3,4 +3,5 @@ ITEMS = src/action \
 	src/push_swap \
 	src/test \
 	src/verbose \
-	src/env
+	src/env \
+	src/print_action

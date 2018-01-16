@@ -6,7 +6,7 @@
 /*   By: hmartzol <hmartzol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 20:05:50 by hmartzol          #+#    #+#             */
-/*   Updated: 2018/01/14 17:30:55 by hmartzol         ###   ########.fr       */
+/*   Updated: 2018/01/14 18:28:29 by hmartzol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 t_ps_env	*env(void)
 {
-	static t_ps_env senv = {{0, 0, 0}, 0, 0};
+	static t_ps_env senv = {{0, 0, 0}, 0, 0, 0};
 
 	return (&senv);
 }
