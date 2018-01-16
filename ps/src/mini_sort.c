@@ -6,11 +6,15 @@
 /*   By: hmartzol <hmartzol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/16 00:51:13 by hmartzol          #+#    #+#             */
-/*   Updated: 2018/01/16 01:36:25 by hmartzol         ###   ########.fr       */
+/*   Updated: 2018/01/16 18:50:47 by hmartzol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <push_swap.h>
+
+/*
+** simple in set instructions to make a basic switch
+*/
 
 int		mini_sort(t_ps_env *env, t_pss *stack)
 {
@@ -27,4 +31,5 @@ int		mini_sort(t_ps_env *env, t_pss *stack)
 	}
 	if (stack->size > 1 && stack->first->value * stack->order < node->value)
 		action(env, stack->mask | SWAP);
+	return (0);
 }

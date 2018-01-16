@@ -1,31 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test_sort.c                                        :+:      :+:    :+:   */
+/*   test_duplicates.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hmartzol <hmartzol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/01/16 01:35:36 by hmartzol          #+#    #+#             */
-/*   Updated: 2018/01/16 19:24:15 by hmartzol         ###   ########.fr       */
+/*   Created: 2018/01/16 18:21:57 by hmartzol          #+#    #+#             */
+/*   Updated: 2018/01/16 19:10:10 by hmartzol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <push_swap.h>
 
-int		test_sort(t_ps_env *env)
-{
-	t_pss_node	*node;
+/*
+** test if there is two occurences of the same number in the initial list
+*/
 
-	if (env->s[1].size)
-		return (0);
+void	test_duplicates(t_ps_env *env)
+{
+	size_t	i;
+	size_t	j;
+
 	if (env->s[0].size < 2)
-		return (1);
-	node = env->s[0].first;
-	while (node && node->next)
+		return ;
+	i = -1;
+	while (++i < env->s[0].size)
 	{
-		if (node->value > node->next->value)
-			return (0);
-		node = node->next;
+		j = -1;
+		while (++j < env->s[0].size)
+		{
+			if (j == i)
+				continue ;
+			if (env->node_head[i].value == env->node_head[j].value)
+			{
+				ft_printf("Error\n");
+				exit(1);
+			}
+		}
 	}
-	return (1);
 }

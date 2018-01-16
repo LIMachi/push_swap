@@ -1,3 +1,10 @@
-ITEMS := src/mini_sort \
-		src/pss \
-		src/quickersort
+ITEMS = 	action \
+	main \
+	micro_sort \
+	mini_sort \
+	optimizer \
+	printer \
+	queue_action \
+	quickersort \
+	test_duplicates \
+	test_sort
