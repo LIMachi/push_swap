@@ -6,7 +6,7 @@
 /*   By: hmartzol <hmartzol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/15 04:51:45 by hmartzol          #+#    #+#             */
-/*   Updated: 2018/01/17 03:07:20 by hmartzol         ###   ########.fr       */
+/*   Updated: 2018/01/17 03:34:55 by hmartzol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ inline static int	continue_cycle(t_pss_node *node, int64_t pivot,
 inline static void	rec1(t_ps_env *env, t_pss *stack, size_t rotations,
 						size_t pushes)
 {
-
 	if (stack->mask == STAC_B)
 		recursion(env, env->s, pushes);
 	if (rotations > stack->size / 2 && stack->size > 3)
@@ -73,8 +72,6 @@ inline static void	rec1(t_ps_env *env, t_pss *stack, size_t rotations,
 		while (rotations--)
 			action(env, stack->mask | RROTATE);
 }
-
-
 
 /*
 ** lower/bigger elements than local median get pushed to the other stack

@@ -6,7 +6,7 @@
 /*   By: hmartzol <hmartzol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/15 20:53:40 by hmartzol          #+#    #+#             */
-/*   Updated: 2018/01/17 03:07:33 by hmartzol         ###   ########.fr       */
+/*   Updated: 2018/01/17 03:31:12 by hmartzol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,24 +15,6 @@
 /*
 ** basic set of instructions
 */
-
-// inline static int	swap(t_pss *stack, t_pss *unused)
-// {
-// 	t_pss_node	*tmp;
-//
-// 	(void)unused;
-// 	if (stack->size < 2)
-// 		return (-1);
-// 	tmp = stack->first;
-// 	stack->first = tmp->next;
-// 	stack->first->prev = NULL;
-// 	tmp->prev = stack->first;
-// 	tmp->next = stack->first->next;
-// 	stack->first->next = tmp;
-// 	if (stack->size == 2)
-// 		stack->last = tmp;
-// 	return (0);
-// }
 
 inline static int	swap(t_pss *stack, t_pss *unused)
 {
@@ -109,7 +91,7 @@ inline static int	push(t_pss *from, t_pss *to)
 	return (0);
 }
 
-int					action(t_ps_env *e, t_actions act)
+void				action(t_ps_env *e, t_actions act)
 {
 	int		r;
 	int		s;
@@ -136,5 +118,4 @@ int					action(t_ps_env *e, t_actions act)
 	}
 	if (e->tmp_sort && !r)
 		queue_action(e, act);
-	return (r);
 }

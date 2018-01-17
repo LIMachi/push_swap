@@ -6,7 +6,7 @@
 /*   By: hmartzol <hmartzol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/16 18:34:21 by hmartzol          #+#    #+#             */
-/*   Updated: 2018/01/17 03:20:47 by hmartzol         ###   ########.fr       */
+/*   Updated: 2018/01/17 03:35:43 by hmartzol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,23 +33,23 @@ typedef enum			e_actmask
 
 typedef enum			e_actions
 {
-	SA  = SWAP | STAC_A,
-	SB  = SWAP | STAC_B,
-	SS  = SWAP | STAC_A | STAC_B,
-	RA  = ROTATE | STAC_A,
-	RB  = ROTATE | STAC_B,
-	RR  = ROTATE | STAC_A | STAC_B,
+	SA = SWAP | STAC_A,
+	SB = SWAP | STAC_B,
+	SS = SWAP | STAC_A | STAC_B,
+	RA = ROTATE | STAC_A,
+	RB = ROTATE | STAC_B,
+	RR = ROTATE | STAC_A | STAC_B,
 	RRA = RROTATE | STAC_A,
 	RRB = RROTATE | STAC_B,
 	RRR = RROTATE | STAC_A | STAC_B,
-	PA  = PUSH | STAC_A,
-	PB  = PUSH | STAC_B,
-	VA  = VERBOSE | STAC_A,
-	VB  = VERBOSE | STAC_B,
-	VV  = VERBOSE | STAC_A | STAC_B,
-	DA  = DELTA | STAC_A,
-	DB  = DELTA | STAC_B,
-	DD  = DELTA | STAC_A | STAC_B
+	PA = PUSH | STAC_A,
+	PB = PUSH | STAC_B,
+	VA = VERBOSE | STAC_A,
+	VB = VERBOSE | STAC_B,
+	VV = VERBOSE | STAC_A | STAC_B,
+	DA = DELTA | STAC_A,
+	DB = DELTA | STAC_B,
+	DD = DELTA | STAC_A | STAC_B
 }						t_actions;
 
 typedef struct			s_act_list
@@ -81,17 +81,14 @@ typedef struct			s_ps_env
 	int64_t				*tmp_sort;
 	t_act_list			*acts;
 	int					output;
-	int					input;
 	int					no_opt;
 }						t_ps_env;
-
-
 
 /*
 ** src/actions.c
 */
 
-int						action(t_ps_env *e, t_actions act);
+void					action(t_ps_env *e, t_actions act);
 
 /*
 ** src/micro_sort.c
