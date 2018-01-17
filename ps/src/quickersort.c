@@ -6,7 +6,7 @@
 /*   By: hmartzol <hmartzol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/15 04:51:45 by hmartzol          #+#    #+#             */
-/*   Updated: 2018/01/16 18:54:51 by hmartzol         ###   ########.fr       */
+/*   Updated: 2018/01/17 03:07:20 by hmartzol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,13 @@
 ** sort and voila
 */
 
-inline static int	optimum_median(t_pss_node *node, int64_t *tmp_sort)
+inline static int	optimum_median(t_pss_node *node, int64_t *tmp_sort,
+									size_t size)
 {
 	size_t	i;
 
 	i = 0;
-	while (node)
+	while (node && size--)
 	{
 		tmp_sort[i++] = node->value;
 		node = node->next;
@@ -43,9 +44,10 @@ inline static int	optimum_median(t_pss_node *node, int64_t *tmp_sort)
 ** (based on list order) than the median
 */
 
-inline static int	continue_cycle(t_pss_node *node, int64_t pivot, int64_t order)
+inline static int	continue_cycle(t_pss_node *node, int64_t pivot,
+									int64_t order, size_t size)
 {
-	while (node)
+	while (node && size--)
 	{
 		if (node->value * order < pivot)
 			return (1);
@@ -58,23 +60,21 @@ inline static int	continue_cycle(t_pss_node *node, int64_t pivot, int64_t order)
 ** cut the recursion in 2 parts, thanks 42 and your odd norms
 */
 
-inline static int	rec1(t_ps_env *env, t_pss *stack, size_t rotations, size_t pushes)
+inline static void	rec1(t_ps_env *env, t_pss *stack, size_t rotations,
+						size_t pushes)
 {
+
 	if (stack->mask == STAC_B)
-		recursion(env, &env->s[0]);
+		recursion(env, env->s, pushes);
 	if (rotations > stack->size / 2 && stack->size > 3)
 		while (rotations++ < stack->size)
 			action(env, stack->mask | ROTATE);
 	else if (stack->size > 3)
 		while (rotations--)
 			action(env, stack->mask | RROTATE);
-	if (stack->mask == STAC_A)
-		recursion(env, stack);
-	recursion(env, &env->s[1]);
-	while (pushes--)
-		action(env, stack->mask | PUSH);
-	return (0);
 }
+
+
 
 /*
 ** lower/bigger elements than local median get pushed to the other stack
@@ -82,29 +82,32 @@ inline static int	rec1(t_ps_env *env, t_pss *stack, size_t rotations, size_t pus
 ** basic reproduction of a quicsort
 */
 
-int					recursion(t_ps_env *env, t_pss *stack)
+int					recursion(t_ps_env *env, t_pss *stack, size_t size)
 {
 	int64_t	pivot;
 	size_t	rotations;
 	size_t	pushes;
+	size_t	i;
 
 	pushes = 0;
 	rotations = 0;
-	if (stack->size <= 3)
+	if (size <= 3)
 		return (mini_sort(env, stack));
-	pivot = optimum_median(stack->first, env->tmp_sort);
-	while (continue_cycle(stack->first, pivot, stack->order))
+	pivot = optimum_median(stack->first, env->tmp_sort, size) * stack->order;
+	i = 0;
+	while (continue_cycle(stack->first, pivot, stack->order, size - i) &&
+			i++ < size)
 		if (stack->first->value * stack->order < pivot)
-		{
-			++pushes;
-			action(env, (stack->mask ^ 0b11000000) | PUSH);
-		}
+			action(env, (stack->mask ^ 0b11000000) | PUSH | (0 & ++pushes));
 		else
-		{
-			++rotations;
-			action(env, stack->mask | ROTATE);
-		}
-	return (rec1(env, stack, rotations, pushes));
+			action(env, stack->mask | ROTATE | (0 & ++rotations));
+	rec1(env, stack, rotations, pushes);
+	recursion(env, stack, size - pushes);
+	if (stack->mask == STAC_A)
+		recursion(env, &env->s[1], pushes);
+	while (pushes--)
+		action(env, stack->mask | PUSH);
+	return (0);
 }
 
 /*
@@ -115,7 +118,7 @@ int					recursion(t_ps_env *env, t_pss *stack)
 int					quickersort(t_ps_env *env)
 {
 	if (env->s[0].size > 3)
-		recursion(env, env->s);
+		recursion(env, env->s, env->s->size);
 	else
 		micro_sort(env);
 	if (!env->no_opt)

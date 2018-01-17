@@ -6,7 +6,7 @@
 /*   By: hmartzol <hmartzol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/15 20:53:40 by hmartzol          #+#    #+#             */
-/*   Updated: 2018/01/16 19:24:45 by hmartzol         ###   ########.fr       */
+/*   Updated: 2018/01/17 03:07:33 by hmartzol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,34 @@
 ** basic set of instructions
 */
 
+// inline static int	swap(t_pss *stack, t_pss *unused)
+// {
+// 	t_pss_node	*tmp;
+//
+// 	(void)unused;
+// 	if (stack->size < 2)
+// 		return (-1);
+// 	tmp = stack->first;
+// 	stack->first = tmp->next;
+// 	stack->first->prev = NULL;
+// 	tmp->prev = stack->first;
+// 	tmp->next = stack->first->next;
+// 	stack->first->next = tmp;
+// 	if (stack->size == 2)
+// 		stack->last = tmp;
+// 	return (0);
+// }
+
 inline static int	swap(t_pss *stack, t_pss *unused)
 {
-	t_pss_node	*tmp;
+	int64_t	t;
 
 	(void)unused;
 	if (stack->size < 2)
 		return (-1);
-	tmp = stack->first;
-	stack->first = tmp->next;
-	stack->first->prev = NULL;
-	tmp->prev = stack->first;
-	tmp->next = stack->first->next;
-	stack->first->next = tmp;
+	t = stack->first->value;
+	stack->first->value = stack->first->next->value;
+	stack->first->next->value = t;
 	return (0);
 }
 
@@ -72,18 +87,24 @@ inline static int	push(t_pss *from, t_pss *to)
 
 	if (from->size == 0)
 		return (-1);
-	tmp = from->first;
-	from->first = tmp->next;
-	from->first->prev = NULL;
-	if (to->size > 0)
+	if (from->size == 1)
 	{
-		tmp->next = to->first;
-		to->first->prev = tmp;
+		from->first->next = to->first;
+		to->first = from->first;
+		from->first = NULL;
+		from->last = NULL;
+		from->size = 0;
+		++to->size;
+		return (0);
 	}
-	else
-		tmp->next = NULL;
-	--from->size;
-	++to->size;
+	tmp = from->first;
+	from->first = from->first->next;
+	from->first->prev = NULL;
+	if (--from->size == 1)
+		from->last = from->first;
+	if (to->size++)
+		to->first->prev = tmp;
+	tmp->next = to->first;
 	to->first = tmp;
 	return (0);
 }
@@ -92,25 +113,27 @@ int					action(t_ps_env *e, t_actions act)
 {
 	int		r;
 	int		s;
+	int		m;
 
 	r = 0;
 	s = 0;
-	while (!r && (act & (STAC_A | STAC_B)))
+	m = act;
+	while (!r && s < 2 && (m & (STAC_A | STAC_B)))
 	{
-		if (act & STAC_A)
-			act ^= STAC_A;
+		if (m & STAC_A)
+			m ^= STAC_A;
 		else
 			s = 1;
-		if (act & SWAP)
+		if (m & SWAP)
 			r |= swap(&e->s[s], NULL);
-		if (act & ROTATE)
+		if (m & ROTATE)
 			r |= rotate(&e->s[s], NULL);
-		if (act & RROTATE)
+		if (m & RROTATE)
 			r |= rrotate(&e->s[s], NULL);
-		if (act & PUSH)
-			r |= push(&e->s[s], &e->s[s ^ 1]);
+		if (m & PUSH)
+			r |= push(&e->s[s ^ 1], &e->s[s]);
+		++s;
 	}
-	printf("r status: %d\naction: %d\n", r, act);
 	if (e->tmp_sort && !r)
 		queue_action(e, act);
 	return (r);

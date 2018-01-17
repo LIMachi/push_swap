@@ -6,7 +6,7 @@
 /*   By: hmartzol <hmartzol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/16 18:34:21 by hmartzol          #+#    #+#             */
-/*   Updated: 2018/01/16 19:26:14 by hmartzol         ###   ########.fr       */
+/*   Updated: 2018/01/17 03:20:47 by hmartzol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,33 +19,6 @@
 # include <libft.h>
 # include <ft_getopt.h>
 
-typedef enum			e_actions
-{
-	SA  = 0b10000001,
-	SB  = 0b01000001,
-	SS  = 0b11000001,
-	RA  = 0b10000010,
-	RB  = 0b01000010,
-	RR  = 0b11000010,
-	RRA = 0b10000100,
-	RRB = 0b01000100,
-	RRR = 0b11000100,
-	PA  = 0b10001000,
-	PB  = 0b01001000,
-	VA  = 0b10010000,
-	VB  = 0b01010000,
-	VV  = 0b11010000,
-	DA  = 0b10100000,
-	DB  = 0b01100000,
-	DD  = 0b11100000
-}						t_actions;
-
-typedef struct			s_act_list
-{
-	t_actions			code;
-	struct s_act_list	*next;
-}						t_act_list;
-
 typedef enum			e_actmask
 {
 	SWAP = 1,
@@ -57,6 +30,33 @@ typedef enum			e_actmask
 	STAC_B = 64,
 	STAC_A = 128
 }						t_actmask;
+
+typedef enum			e_actions
+{
+	SA  = SWAP | STAC_A,
+	SB  = SWAP | STAC_B,
+	SS  = SWAP | STAC_A | STAC_B,
+	RA  = ROTATE | STAC_A,
+	RB  = ROTATE | STAC_B,
+	RR  = ROTATE | STAC_A | STAC_B,
+	RRA = RROTATE | STAC_A,
+	RRB = RROTATE | STAC_B,
+	RRR = RROTATE | STAC_A | STAC_B,
+	PA  = PUSH | STAC_A,
+	PB  = PUSH | STAC_B,
+	VA  = VERBOSE | STAC_A,
+	VB  = VERBOSE | STAC_B,
+	VV  = VERBOSE | STAC_A | STAC_B,
+	DA  = DELTA | STAC_A,
+	DB  = DELTA | STAC_B,
+	DD  = DELTA | STAC_A | STAC_B
+}						t_actions;
+
+typedef struct			s_act_list
+{
+	t_actions			code;
+	struct s_act_list	*next;
+}						t_act_list;
 
 typedef struct			s_pss_node
 {
@@ -127,7 +127,7 @@ void					queue_action(t_ps_env *e, t_actions act);
 ** src/quickersort.c
 */
 
-int						recursion(t_ps_env *env, t_pss *stack);
+int						recursion(t_ps_env *env, t_pss *stack, size_t size);
 int						quickersort(t_ps_env *env);
 
 /*

@@ -6,7 +6,7 @@
 /*   By: hmartzol <hmartzol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/16 17:40:51 by hmartzol          #+#    #+#             */
-/*   Updated: 2018/01/16 19:33:47 by hmartzol         ###   ########.fr       */
+/*   Updated: 2018/01/17 03:08:19 by hmartzol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ inline static void	get_args(int argc, char **argv, t_ps_env *e)
 		exit(0 & ft_printf("failled to alocate the stack\n"));
 	while (ge.optind < argc && ++r < argc)
 	{
-		printf("%p\n", &e->node_head[r]);
 		if (!ft_eval_int_ll((e->node_head[r] = (t_pss_node){.value = ft_strtoll(
 				argv[ge.optind++], &ge.nextchar, 10), .prev = (r ? &e->node_head[r - 1]
 				: NULL), .next = (((size_t)r + 1) < e->s[0].size ? &e->node_head[r + 1] :
@@ -64,20 +63,14 @@ int					main(int argc, char **argv)
 		.node_head = 0, .tmp_sort = 0, .input = -1, .output = 1, .no_opt = 0};
 
 	get_args(argc, argv, &env);
-	printf("size: %zu\n", env.s[0].size);
 	test_duplicates(&env);
 	env.s[0].first = env.node_head;
 	env.s[0].last = &env.node_head[env.s[0].size - 1];
-	printf("ayaye captain\n");
 	if ((env.tmp_sort = malloc(sizeof(int64_t) * env.s[0].size)) == NULL)
 		exit(0 & ft_printf("failled to alocate the temporary array"));
-	while (1);
 	quickersort(&env);
 	if (env.acts)
-	{
-		ft_printf("prout\n");
 		printer(env.acts, env.output);
-	}
 	else
 		write(env.output, "\n", 1);
 	free(env.node_head);

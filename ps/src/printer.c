@@ -6,7 +6,7 @@
 /*   By: hmartzol <hmartzol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/16 16:27:07 by hmartzol          #+#    #+#             */
-/*   Updated: 2018/01/16 18:51:49 by hmartzol         ###   ########.fr       */
+/*   Updated: 2018/01/17 02:06:59 by hmartzol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,11 @@ void	printer(t_act_list *acts, int fd)
 		buff[i++] = 'r';
 		buff[i++] = 'r';
 	}
-	if (acts->code & (STAC_A | STAC_B))
+	if ((acts->code & (STAC_A | STAC_B)) == (STAC_A | STAC_B))
 		buff[i] = buff[i - 1];
 	else if (acts->code & STAC_A)
 		buff[i] = 'a';
-	else if (acts->code & STAC_A)
+	else if (acts->code & STAC_B)
 		buff[i] = 'b';
 	buff[++i] = '\n';
 	write(fd, buff, i + 1);

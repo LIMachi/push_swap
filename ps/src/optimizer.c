@@ -6,7 +6,7 @@
 /*   By: hmartzol <hmartzol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/16 01:26:56 by hmartzol          #+#    #+#             */
-/*   Updated: 2018/01/16 18:56:55 by hmartzol         ###   ########.fr       */
+/*   Updated: 2018/01/17 03:25:49 by hmartzol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,10 @@ inline static int	complement(t_actions code1, t_actions code2)
 		if (i < 3)
 		{
 			j = -1;
-			while (++j < 3 && i != j && tab[s][j] != code2)
+			while (i == ++j || (j < 3 && tab[s][j] != code2))
 				;
 			if (j < 3)
-				return (tab[s][(i + 1) ^ (j + 1)]);
+				return (tab[s][((i + 1) ^ (j + 1)) - 1]);
 		}
 	}
 	return (0);
@@ -56,8 +56,7 @@ void				optimizer(t_act_list *acts)
 	t_act_list	*tmp;
 	int			mask;
 
-	if (acts)
-		acts = acts->next;
+	acts = acts ? acts->next : NULL;
 	while (acts && acts->next)
 	{
 		if (!(mask = complement(acts->code, acts->next->code)))
@@ -75,7 +74,8 @@ void				optimizer(t_act_list *acts)
 			acts = tmp;
 			continue ;
 		}
-		acts->code = mask;
+		else
+			acts->code = mask;
 		acts = acts->next;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: hmartzol <hmartzol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/16 00:51:13 by hmartzol          #+#    #+#             */
-/*   Updated: 2018/01/16 18:50:47 by hmartzol         ###   ########.fr       */
+/*   Updated: 2018/01/17 02:53:49 by hmartzol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,15 @@ int		mini_sort(t_ps_env *env, t_pss *stack)
 	t_pss_node	*node;
 
 	node = stack->first->next;
-	if (stack->size > 1 && stack->first->value * stack->order < node->value)
+	if (stack->size > 1 && stack->first->value * stack->order > node->value * stack->order)
 		action(env, stack->mask | SWAP);
-	if (stack->size > 2 && node->value * stack->order < node->next->value)
+	if (stack->size > 2 && node->value * stack->order > node->next->value * stack->order)
 	{
 		action(env, stack->mask | ROTATE);
 		action(env, stack->mask | SWAP);
 		action(env, stack->mask | RROTATE);
 	}
-	if (stack->size > 1 && stack->first->value * stack->order < node->value)
+	if (stack->size > 1 && stack->first->value * stack->order > node->value * stack->order)
 		action(env, stack->mask | SWAP);
 	return (0);
 }
