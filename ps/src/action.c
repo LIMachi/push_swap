@@ -6,7 +6,7 @@
 /*   By: hmartzol <hmartzol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/15 20:53:40 by hmartzol          #+#    #+#             */
-/*   Updated: 2018/01/17 03:31:12 by hmartzol         ###   ########.fr       */
+/*   Updated: 2018/01/17 03:49:10 by hmartzol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@ inline static int	rrotate(t_pss *stack, t_pss *unused)
 	tmp = stack->last;
 	stack->last = tmp->prev;
 	stack->last->next = NULL;
-	tmp->prev = NULL;
 	tmp->next = stack->first;
+	tmp->prev = NULL;
 	stack->first->prev = tmp;
 	stack->first = tmp;
 	return (0);
@@ -75,9 +75,8 @@ inline static int	push(t_pss *from, t_pss *to)
 		to->first = from->first;
 		from->first = NULL;
 		from->last = NULL;
-		from->size = 0;
 		++to->size;
-		return (0);
+		return (from->size = 0);
 	}
 	tmp = from->first;
 	from->first = from->first->next;
@@ -86,6 +85,8 @@ inline static int	push(t_pss *from, t_pss *to)
 		from->last = from->first;
 	if (to->size++)
 		to->first->prev = tmp;
+	else
+		to->last = tmp;
 	tmp->next = to->first;
 	to->first = tmp;
 	return (0);

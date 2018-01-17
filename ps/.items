@@ -6,5 +6,5 @@ ITEMS = 	action \
 	printer \
 	queue_action \
 	quickersort \
-	test_duplicates \
+	read_args \
 	test_sort

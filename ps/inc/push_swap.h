@@ -6,7 +6,7 @@
 /*   By: hmartzol <hmartzol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/16 18:34:21 by hmartzol          #+#    #+#             */
-/*   Updated: 2018/01/17 03:35:43 by hmartzol         ###   ########.fr       */
+/*   Updated: 2018/01/17 22:30:01 by hmartzol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ int						mini_sort(t_ps_env *env, t_pss *stack);
 ** src/optimizer.c
 */
 
-void					optimizer(t_act_list *acts);
+t_act_list				*optimizer(t_act_list *acts, int *run);
 
 /*
 ** src/printer.c
@@ -128,10 +128,10 @@ int						recursion(t_ps_env *env, t_pss *stack, size_t size);
 int						quickersort(t_ps_env *env);
 
 /*
-** src/test_duplicates.c
+** src/read_args.c
 */
 
-void					test_duplicates(t_ps_env *env);
+void					read_args(int argc, char **argv, t_ps_env *e);
 
 /*
 ** src/test_sort.c

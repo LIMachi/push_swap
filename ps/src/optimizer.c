@@ -6,7 +6,7 @@
 /*   By: hmartzol <hmartzol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/16 01:26:56 by hmartzol          #+#    #+#             */
-/*   Updated: 2018/01/17 03:25:49 by hmartzol         ###   ########.fr       */
+/*   Updated: 2018/01/17 16:50:16 by hmartzol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,31 +51,41 @@ inline static int	complement(t_actions code1, t_actions code2)
 ** to mess with changing the first action of env
 */
 
-void				optimizer(t_act_list *acts)
+t_act_list			*optimizer(t_act_list *acts, int *run)
 {
 	t_act_list	*tmp;
+	t_act_list	*last;
+	t_act_list	*out;
 	int			mask;
 
-	acts = acts ? acts->next : NULL;
-	while (acts && acts->next)
-	{
-		if (!(mask = complement(acts->code, acts->next->code)))
+	out = NULL;
+	last = NULL;
+	*run = 0;
+	while (run && acts && acts->next)
+		if ((mask = complement(acts->code, acts->next->code)) != -1)
 		{
+			if (out == NULL)
+				out = acts;
+			if (mask)
+			{
+				*run = 1;
+				acts->code = mask;
+				tmp = acts->next->next;
+				free(acts->next);
+				acts->next = tmp;
+			}
+			last = acts;
 			acts = acts->next;
-			continue ;
-		}
-		tmp = acts->next->next;
-		free(acts->next);
-		acts->next = tmp;
-		if (mask == -1)
-		{
-			tmp = acts->next;
-			free(acts);
-			acts = tmp;
-			continue ;
 		}
 		else
-			acts->code = mask;
-		acts = acts->next;
-	}
+		{
+			*run = 1;
+			tmp = acts->next->next;
+			if (last)
+				last->next = tmp;
+			free(acts->next);
+			free(acts);
+			acts = tmp;
+		}
+	return (out);
 }
