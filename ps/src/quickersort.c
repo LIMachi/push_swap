@@ -6,7 +6,7 @@
 /*   By: hmartzol <hmartzol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/15 04:51:45 by hmartzol          #+#    #+#             */
-/*   Updated: 2018/01/18 00:41:03 by hmartzol         ###   ########.fr       */
+/*   Updated: 2018/01/18 20:37:49 by hmartzol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,17 +114,11 @@ int					recursion(t_ps_env *env, t_pss *stack, size_t size)
 
 int					quickersort(t_ps_env *env)
 {
-	int	run;
-
 	if (env->s[0].size > 3)
 		recursion(env, env->s, env->s->size);
 	else
 		micro_sort(env);
 	if (!env->no_opt && env->acts)
-	{
-		run = 1;
-		while (run && env->acts->next)
-			env->acts = optimizer(env->acts, &run);
-	}
+		env->acts = optimizer(env->acts);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: hmartzol <hmartzol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/16 18:34:21 by hmartzol          #+#    #+#             */
-/*   Updated: 2018/01/17 22:30:01 by hmartzol         ###   ########.fr       */
+/*   Updated: 2018/01/19 23:06:20 by hmartzol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,17 +33,18 @@ typedef enum			e_actmask
 
 typedef enum			e_actions
 {
-	SA = SWAP | STAC_A,
-	SB = SWAP | STAC_B,
-	SS = SWAP | STAC_A | STAC_B,
-	RA = ROTATE | STAC_A,
-	RB = ROTATE | STAC_B,
-	RR = ROTATE | STAC_A | STAC_B,
-	RRA = RROTATE | STAC_A,
-	RRB = RROTATE | STAC_B,
-	RRR = RROTATE | STAC_A | STAC_B,
-	PA = PUSH | STAC_A,
-	PB = PUSH | STAC_B,
+
+	SB = 65,
+	RB = 66,
+	RRB = 68,
+	PB = 72,
+	SA = 129,
+	RA = 130,
+	RRA = 132,
+	PA = 136,
+	SS = 193,
+	RR = 194,
+	RRR = 196,
 	VA = VERBOSE | STAC_A,
 	VB = VERBOSE | STAC_B,
 	VV = VERBOSE | STAC_A | STAC_B,
@@ -55,6 +56,7 @@ typedef enum			e_actions
 typedef struct			s_act_list
 {
 	t_actions			code;
+	struct s_act_list	*prev;
 	struct s_act_list	*next;
 }						t_act_list;
 
@@ -106,7 +108,7 @@ int						mini_sort(t_ps_env *env, t_pss *stack);
 ** src/optimizer.c
 */
 
-t_act_list				*optimizer(t_act_list *acts, int *run);
+t_act_list				*optimizer(t_act_list *acts);
 
 /*
 ** src/printer.c

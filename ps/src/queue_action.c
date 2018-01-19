@@ -6,7 +6,7 @@
 /*   By: hmartzol <hmartzol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/16 01:20:19 by hmartzol          #+#    #+#             */
-/*   Updated: 2018/01/17 16:33:10 by hmartzol         ###   ########.fr       */
+/*   Updated: 2018/01/18 20:20:09 by hmartzol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,8 @@ void	queue_action(t_ps_env *e, t_actions act)
 		return ;
 	tmp->code = act;
 	tmp->next = e->acts;
+	tmp->prev = NULL;
+	if (e->acts)
+		e->acts->prev = tmp;
 	e->acts = tmp;
 }
