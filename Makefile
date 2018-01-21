@@ -22,7 +22,6 @@ SUBMAKECMDGOALS := all
 endif
 
 ifeq ($(TARGET_CHECKER), true)
-# $(warning $(shell $(MAKE) -C check $(SUBMAKECMDGOALS)))
 $(info $(shell $(MAKE) -C checker_app $(SUBMAKECMDGOALS)))
 endif
 

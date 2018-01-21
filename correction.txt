@@ -1,0 +1,62 @@
++les bases
+
+makefile: ok
+norme (norminette **/*.[ch] depuis la racine du projet): ok
+fichier auteur: ok
+leaks/valgrind: ok
+
++checker:
+
+-gestion d'erreur:
+param non numerique: ok
+param en doublon: ok
+plus grand que maxint: ok
+pas de param: ok
+instructions inexistantes: ok
+instructions avec espaces: ok
+
+-test faux:
+0 9 1 8 2 7 3 6 4 5 [sa, pb, rrr]: ok
+test random faux: ok
+
+-test vrais:
+0 1 2: ok
+0 9 1 8 2 [pb, ra, pb, ra, sa, ra, pa, pa]: ok
+test random valide: ok
+
++push_swap:
+
+-test identité:
+42: ok
+0 1 2 3: ok
+0 1 2 3 4 5 6 7 8 9: ok
+
+-version simple:
+ARG="2 1 0"; ./push_swap $ARG | ./checker $ARG: ok
+
+-tout aussi simple:
+ARG="1 5 2 4 3"; ./push_swap $ARG | ./checker $ARG: ok
+ARG="1 10000 10 1000 100"; ./push_swap $ARG | ./checker $ARG: ok
+
+-version intermediaire:
+(moins de 800?)
+ARG=`ruby -e "puts (1..100).to_a.shuffle.join(' ')"`; ./push_swap $ARG | ./checker $ARG: ok
+
+-version avancée:
+(moins de 5300 instructions)
+ARG=`ruby -e "puts (1..500).to_a.shuffle.join(' ')"`; ./push_swap $ARG | ./checker $ARG: ok
+
++bonus
+
+-push_swap
+help
+possibilité de remplir la stack depuis un fichier et de sortir les instructions dans un fichier
+verbose
+possibilité de désactiver les optimisation pour avoir un aperçu réel de l'éficacité du quicksort
+god damn fast
+
+-checker
+help
+possibilité de remplir la stack et lire les instructions depuis un/des fichiers
+verbose
+couleurs ? (pas encore fait, il y a des symboles a la place :p)

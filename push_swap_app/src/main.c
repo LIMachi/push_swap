@@ -6,7 +6,7 @@
 /*   By: hmartzol <hmartzol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/16 17:40:51 by hmartzol          #+#    #+#             */
-/*   Updated: 2018/01/21 04:29:44 by hmartzol         ###   ########.fr       */
+/*   Updated: 2018/01/21 05:24:18 by hmartzol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ int					main(int argc, char **argv)
 	.order = 1, .mask = 1 << 7}, {.first = NULL, .last = NULL, .size = 0,
 	.order = -1, .mask = 1 << 6}}, .node_head = 0, .tmp_sort = 0, .acts = 0,
 	.output = 1, .no_opt = 0, .verbose = 0, .input = -1};
+	ft_error(ERROR_SILENT_ON, NULL);
 	read_opts(argc, argv, &env);
 	env.s[0].first = env.node_head;
 	env.s[0].last = &env.node_head[env.s[0].size - 1];

@@ -6,7 +6,7 @@
 /*   By: hmartzol <hmartzol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/19 23:44:11 by hmartzol          #+#    #+#             */
-/*   Updated: 2018/01/21 04:29:37 by hmartzol         ###   ########.fr       */
+/*   Updated: 2018/01/21 05:48:16 by hmartzol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ int					main(int argc, char **argv)
 	.order = 1, .mask = 1 << 7}, {.first = NULL, .last = NULL, .size = 0,
 	.order = -1, .mask = 1 << 6}}, .node_head = 0,
 	.input = -1, .color = 0, .verbose = 0, .actions = 0};
+	ft_error(ERROR_SILENT_ON, NULL);
 	read_opts(argc, argv, &env);
 	env.s[0].first = env.node_head;
 	env.s[0].last = &env.node_head[env.s[0].size - 1];
@@ -92,8 +93,8 @@ int					main(int argc, char **argv)
 		verbose(&env, VV);
 	while ((act = get_code(env.actions)) > 0)
 		if (action(&env, act))
-			exit(_(ft_printf("Error\n"), 0));
-	if (act == -1)
+			exit(_(ft_printf("KO\n"), 0));
+	if (!act)
 		ft_printf("Error\n");
 	else
 		ft_printf("%s\n", test_sort(&env) ? "OK" : "KO");

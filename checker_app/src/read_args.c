@@ -6,7 +6,7 @@
 /*   By: hmartzol <hmartzol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/17 21:51:33 by hmartzol          #+#    #+#             */
-/*   Updated: 2018/01/21 02:31:43 by hmartzol         ###   ########.fr       */
+/*   Updated: 2018/01/21 05:30:57 by hmartzol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ inline static int	first_pass(int argc, char **argv, int verbose)
 		while (*p)
 		{
 			if (!ft_eval_int_ll(tmp = ft_strtoll(p, &t, 10)) || p == t ||
-					(*t && !ft_isspace(*t)))
+				ft_global_error(ERROR_GET, 0) || (*t && !ft_isspace(*t)))
 				exit(_(verbose ? ft_dprintf(2, "[loader]: %lld is not an int"
 					"\n", tmp) : 0, ft_printf("Error\n"), 1));
 			_(++size, p = t);
@@ -104,7 +104,7 @@ inline static char	*load_from_file_first_pass(t_ps_env *env)
 	while (*p)
 	{
 		if (!ft_eval_int_ll(tmp = ft_strtoll(p, &t, 10)) || p == t ||
-				(*t && !ft_isspace(*t)))
+				ft_global_error(ERROR_GET, 0) || (*t && !ft_isspace(*t)))
 			exit(_(ft_free(file), env->verbose ? ft_dprintf(2, "[loader]"
 				": %lld is not an int\n", tmp) : 0, ft_printf("Error\n"), 1));
 		_(++env->s->size, p = t);
