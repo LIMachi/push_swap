@@ -6,7 +6,7 @@
 /*   By: hmartzol <hmartzol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/16 01:26:56 by hmartzol          #+#    #+#             */
-/*   Updated: 2018/01/19 23:02:54 by hmartzol         ###   ########.fr       */
+/*   Updated: 2018/01/20 03:18:26 by hmartzol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ inline static t_act_list	*change_sequence(t_act_list *current, int mask)
 ** remove or change specific sequences of operations
 */
 
-t_act_list					*optimizer(t_act_list *acts)
+t_act_list					*optimizer(t_act_list *acts, int verbose)
 {
 	int			mask;
 
@@ -77,9 +77,20 @@ t_act_list					*optimizer(t_act_list *acts)
 		if (!(mask = optimization(acts->code, acts->next->code)))
 			acts = acts->next;
 		else if (mask == -1)
+		{
+			if (verbose)
+				ft_dprintf(2, "[optimizer]: found action '%s' next to '%s', rem"
+			"oving them both\n", label(acts->code), label(acts->next->code));
 			acts = detach_sequence(acts);
+		}
 		else
+		{
+			if (verbose)
+				ft_dprintf(2, "[optimiser]: found action '%s' next to '%s', rem"
+					"placing them by '%s'\n", label(acts->code),
+					label(acts->next->code), label(mask));
 			acts = change_sequence(acts, mask);
+		}
 	}
 	while (acts && acts->prev)
 		acts = acts->prev;

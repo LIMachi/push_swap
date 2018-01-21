@@ -6,7 +6,7 @@
 /*   By: hmartzol <hmartzol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/16 01:20:19 by hmartzol          #+#    #+#             */
-/*   Updated: 2018/01/18 20:20:09 by hmartzol         ###   ########.fr       */
+/*   Updated: 2018/01/20 03:54:00 by hmartzol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,10 @@ void	queue_action(t_ps_env *e, t_actions act)
 {
 	t_act_list	*tmp;
 
-	if ((tmp = malloc(sizeof(t_act_list))) == NULL)
-		return ;
+	if (e->verbose)
+		ft_dprintf(2, "[action]: queueing action: '%s'\n", label(act));
+	if ((tmp = (t_act_list*)malloc(sizeof(t_act_list))) == NULL)
+		exit(_(ft_printf("Can't queue an action, malloc failed\n"), 4));
 	tmp->code = act;
 	tmp->next = e->acts;
 	tmp->prev = NULL;

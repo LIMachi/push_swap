@@ -1,0 +1,4 @@
+ITEMS = 	action \
+	main \
+	read_args \
+	test_sort

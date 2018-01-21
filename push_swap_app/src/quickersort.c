@@ -6,7 +6,7 @@
 /*   By: hmartzol <hmartzol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/15 04:51:45 by hmartzol          #+#    #+#             */
-/*   Updated: 2018/01/18 20:37:49 by hmartzol         ###   ########.fr       */
+/*   Updated: 2018/01/20 03:18:59 by hmartzol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,11 @@
 ** sort and voila
 */
 
-inline static int	optimum_median(t_pss_node *node, int64_t *tmp_sort,
-									size_t size)
+inline static int64_t	optimum_median(t_ps_env *env, t_pss_node *node,
+										int64_t *tmp_sort, size_t size)
 {
 	size_t	i;
+	int64_t	med;
 
 	i = 0;
 	while (node && size--)
@@ -36,7 +37,10 @@ inline static int	optimum_median(t_pss_node *node, int64_t *tmp_sort,
 		tmp_sort[i++] = node->value;
 		node = node->next;
 	}
-	return (ft_quicksort(tmp_sort, i)[i / 2]);
+	med = ft_quicksort(tmp_sort, i)[i / 2];
+	if (env->verbose)
+		ft_dprintf(2, "[quicksort]: using %lld has a median\n", med);
+	return (med);
 }
 
 /*
@@ -44,7 +48,7 @@ inline static int	optimum_median(t_pss_node *node, int64_t *tmp_sort,
 ** (based on list order) than the median
 */
 
-inline static int	continue_cycle(t_pss_node *node, int64_t pivot,
+inline static int		cycle(t_pss_node *node, int64_t pivot,
 									int64_t order, size_t size)
 {
 	while (node && size--)
@@ -60,7 +64,7 @@ inline static int	continue_cycle(t_pss_node *node, int64_t pivot,
 ** cut the recursion in 2 parts, thanks 42 and your odd norms
 */
 
-inline static void	rec1(t_ps_env *env, t_pss *stack, size_t rotations,
+inline static void		rec1(t_ps_env *env, t_pss *stack, size_t rotations,
 						size_t pushes)
 {
 	if (stack->mask == STAC_B)
@@ -79,7 +83,7 @@ inline static void	rec1(t_ps_env *env, t_pss *stack, size_t rotations,
 ** basic reproduction of a quicsort
 */
 
-int					recursion(t_ps_env *env, t_pss *stack, size_t size)
+int						recursion(t_ps_env *e, t_pss *stack, size_t size)
 {
 	int64_t	pivot;
 	size_t	rotations;
@@ -88,22 +92,23 @@ int					recursion(t_ps_env *env, t_pss *stack, size_t size)
 
 	pushes = 0;
 	rotations = 0;
-	if (size <= 3)
-		return (mini_sort(env, stack));
-	pivot = optimum_median(stack->first, env->tmp_sort, size) * stack->order;
-	i = 0;
-	while (continue_cycle(stack->first, pivot, stack->order, size - i) &&
-			i++ < size)
+	if (!(i = 0) && size <= 3)
+		return (mini_sort(e, stack));
+	pivot = optimum_median(e, stack->first, e->tmp_sort, size) * stack->order;
+	while (cycle(stack->first, pivot, stack->order, size - i) && i++ < size)
 		if (stack->first->value * stack->order < pivot)
-			action(env, (stack->mask ^ 0b11000000) | PUSH | (0 & ++pushes));
+			action(e, (stack->mask ^ 0b11000000) | PUSH | (0 & ++pushes));
 		else
-			action(env, stack->mask | ROTATE | (0 & ++rotations));
-	rec1(env, stack, rotations, pushes);
-	recursion(env, stack, size - pushes);
+			action(e, stack->mask | ROTATE | (0 & ++rotations));
+	if (e->verbose)
+		ft_dprintf(2, "[quicksort]: moved %lu elements from %c to %c\n", pushes,
+			stack->order == 1 ? 'A' : 'B', stack->order == -1 ? 'A' : 'B');
+	rec1(e, stack, rotations, pushes);
+	recursion(e, stack, size - pushes);
 	if (stack->mask == STAC_A)
-		recursion(env, &env->s[1], pushes);
+		recursion(e, &e->s[1], pushes);
 	while (pushes--)
-		action(env, stack->mask | PUSH);
+		action(e, stack->mask | PUSH);
 	return (0);
 }
 
@@ -112,13 +117,17 @@ int					recursion(t_ps_env *env, t_pss *stack, size_t size)
 ** initiate the recursion and clean the result
 */
 
-int					quickersort(t_ps_env *env)
+int						quickersort(t_ps_env *env)
 {
+	if (env->verbose)
+		ft_dprintf(2, "[initialization]: chosing algorithm based on stack size."
+			"..\n[initialization]: using: %s\n",
+			env->s[0].size > 3 ? "quicksort" : "determined actions");
 	if (env->s[0].size > 3)
 		recursion(env, env->s, env->s->size);
 	else
 		micro_sort(env);
 	if (!env->no_opt && env->acts)
-		env->acts = optimizer(env->acts);
+		env->acts = optimizer(env->acts, env->verbose);
 	return (0);
 }

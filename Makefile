@@ -23,11 +23,11 @@ endif
 
 ifeq ($(TARGET_CHECKER), true)
 # $(warning $(shell $(MAKE) -C check $(SUBMAKECMDGOALS)))
-$(info $(shell $(MAKE) -C check $(SUBMAKECMDGOALS)))
+$(info $(shell $(MAKE) -C checker_app $(SUBMAKECMDGOALS)))
 endif
 
 ifeq ($(TARGET_PUSH_SWAP), true)
-$(info $(shell $(MAKE) -C ps $(SUBMAKECMDGOALS)))
+$(info $(shell $(MAKE) -C push_swap_app $(SUBMAKECMDGOALS)))
 endif
 
 all:

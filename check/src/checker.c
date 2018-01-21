@@ -6,11 +6,15 @@
 /*   By: hmartzol <hmartzol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/18 05:37:08 by hmartzol          #+#    #+#             */
-/*   Updated: 2018/01/14 18:40:05 by hmartzol         ###   ########.fr       */
+/*   Updated: 2018/01/20 00:25:41 by hmartzol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <push_swap.h>
+
+/*
+** verbose, couleur, non-opt sur ps, mode interactif, files, verbose sur optimisation
+*/
 
 static int		h(char *name)
 {
@@ -45,7 +49,7 @@ static void		get_args(int argc, char **argv, t_ps_env *e)
 		exit(_(ft_printf("\n"), 0));
 	e->b.s = argc - ge.optind;
 	if ((e->b.d = (int*)ft_malloc(sizeof(int) * e->b.s)) == NULL)
-		exit(_(ft_printf("failled to alocate the stack\n"), 0));
+		exit(_(ft_printf("failed to allocate the stack\n"), 0));
 	e->b.m = 0;
 	while (ge.optind < argc)
 		if (!ft_eval_int_ll(e->b.d[e->b.m++] =

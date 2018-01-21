@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.h                                        :+:      :+:    :+:   */
+/*   checker.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hmartzol <hmartzol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/01/16 18:34:21 by hmartzol          #+#    #+#             */
-/*   Updated: 2018/01/19 23:06:20 by hmartzol         ###   ########.fr       */
+/*   Created: 2018/01/19 23:42:11 by hmartzol          #+#    #+#             */
+/*   Updated: 2018/01/21 01:20:01 by hmartzol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PUSH_SWAP_H
-# define PUSH_SWAP_H
+#ifndef CHECKER_H
+# define CHECKER_H
 
 # include <stdlib.h>
 # include <stdio.h>
@@ -53,13 +53,6 @@ typedef enum			e_actions
 	DD = DELTA | STAC_A | STAC_B
 }						t_actions;
 
-typedef struct			s_act_list
-{
-	t_actions			code;
-	struct s_act_list	*prev;
-	struct s_act_list	*next;
-}						t_act_list;
-
 typedef struct			s_pss_node
 {
 	int64_t				value;
@@ -80,10 +73,10 @@ typedef struct			s_ps_env
 {
 	t_pss				s[2];
 	t_pss_node			*node_head;
-	int64_t				*tmp_sort;
-	t_act_list			*acts;
-	int					output;
-	int					no_opt;
+	int					input;
+	int					actions;
+	int					verbose;
+	int					color;
 }						t_ps_env;
 
 /*
@@ -93,47 +86,10 @@ typedef struct			s_ps_env
 void					action(t_ps_env *e, t_actions act);
 
 /*
-** src/micro_sort.c
-*/
-
-void					micro_sort(t_ps_env *env);
-
-/*
-** src/mini_sort.c
-*/
-
-int						mini_sort(t_ps_env *env, t_pss *stack);
-
-/*
-** src/optimizer.c
-*/
-
-t_act_list				*optimizer(t_act_list *acts);
-
-/*
-** src/printer.c
-*/
-
-void					printer(t_act_list *acts, int fd);
-
-/*
-** src/queue_action.c
-*/
-
-void					queue_action(t_ps_env *e, t_actions act);
-
-/*
-** src/quickersort.c
-*/
-
-int						recursion(t_ps_env *env, t_pss *stack, size_t size);
-int						quickersort(t_ps_env *env);
-
-/*
 ** src/read_args.c
 */
 
-void					read_args(int argc, char **argv, t_ps_env *e);
+int						read_args(int argc, char **argv, t_ps_env *e);
 
 /*
 ** src/test_sort.c
