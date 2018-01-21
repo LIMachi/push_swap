@@ -6,7 +6,7 @@
 /*   By: hmartzol <hmartzol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/15 20:53:40 by hmartzol          #+#    #+#             */
-/*   Updated: 2018/01/21 02:42:05 by hmartzol         ###   ########.fr       */
+/*   Updated: 2018/01/21 04:31:52 by hmartzol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,16 +92,16 @@ inline static int	push(t_pss *from, t_pss *to)
 	return (0);
 }
 
-void				action(t_ps_env *e, t_actions act)
+int					action(t_ps_env *e, t_actions act)
 {
 	int		r;
 	int		s;
 	int		m;
 
 	r = 0;
-	s = 0;
+	s = -1;
 	m = act;
-	while (!r && s < 2 && (m & (STAC_A | STAC_B)))
+	while (!r && ++s < 2 && (m & (STAC_A | STAC_B)))
 	{
 		if (m & STAC_A)
 			m ^= STAC_A;
@@ -115,8 +115,8 @@ void				action(t_ps_env *e, t_actions act)
 			r |= rrotate(&e->s[s], NULL);
 		if (m & PUSH)
 			r |= push(&e->s[s ^ 1], &e->s[s]);
-		++s;
 	}
-	if (e->verbose)
+	if (e->verbose && !r)
 		verbose(e, act);
+	return (r);
 }

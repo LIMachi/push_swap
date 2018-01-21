@@ -6,7 +6,7 @@
 /*   By: hmartzol <hmartzol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/16 17:40:51 by hmartzol          #+#    #+#             */
-/*   Updated: 2018/01/21 02:14:34 by hmartzol         ###   ########.fr       */
+/*   Updated: 2018/01/21 04:29:44 by hmartzol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 inline static int	help(char *name)
 {
 	ft_printf("\nusage: %s [-h --help] [-i --input <path>] [-o --output <path>]"
-	" [-v --verbose] [-n --no-opt] int ...\n"
+	" [-v --verbose] [-n --no-opt] -- int ...\n"
 	"-h --help:          show this help\n"
 	"-i --input <path>:  specify a file from wich load the A stack\n"
 	"-o --output <path>: specify a file to write the instructions\n"

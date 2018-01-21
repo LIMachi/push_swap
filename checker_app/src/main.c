@@ -6,7 +6,7 @@
 /*   By: hmartzol <hmartzol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/19 23:44:11 by hmartzol          #+#    #+#             */
-/*   Updated: 2018/01/21 02:41:19 by hmartzol         ###   ########.fr       */
+/*   Updated: 2018/01/21 04:29:37 by hmartzol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 inline static int	help(char *name)
 {
 	ft_printf("\nusage: %s [-h --help] [-i --input <path>] [-a --actions <path>"
-	"] [-v --verbose] [-c --color] int ...\n"
+	"] [-v --verbose] [-c --color] -- int ...\n"
 	"-h --help:           show this help\n"
 	"-i --input <path>:   specify a file from which to load the A stack\n"
 	"-a --actions <path>: specify a file from which to get the actions to apply"
@@ -53,31 +53,26 @@ inline static void	read_opts(int argc, char **argv, t_ps_env *e)
 	read_args(argc - ge.optind, &argv[ge.optind], e);
 }
 
-int				get_code(int fd)
+inline static int	get_code(int fd)
 {
+	int					i;
+	char				*line;
 	static const char	*t[17][2] = {{"sa", (char*)SA}, {"sb", (char*)SB},
 		{"ss", (char*)SS}, {"ra", (char*)RA}, {"rb", (char*)RB},
 		{"rr", (char*)RR}, {"rra", (char*)RRA}, {"rrb", (char*)RRB},
 		{"rrr", (char*)RRR}, {"pa", (char*)PA}, {"pb", (char*)PB},
 		{"va", (char*)VA}, {"vb", (char*)VB}, {"vv", (char*)VV},
 		{"da", (char*)DA}, {"db", (char*)DB}, {"dd", (char*)DD}};
-	char				buff[5];
-	int					i;
-	int					l;
 
-	if ((l = read(fd, buff, 3)) != 3)
-		return (l == 0 ? 0 : -1);
-	if (buff[2] == 'r' && (l += read(fd, &buff[2], 1) < 2))
-		return (-1);
-	if (buff[--l] == '\n' || buff[l] == '\0')
-		buff[l] = '\0';
-	i = -1;
-	while (++i < 11)
-		if (!ft_strncmp((char*)t[i][0], buff, l))
-			return ((int)(size_t)t[i][1]);
-	while (read(fd, buff, 1))
-		;
-	return (-1);
+	line = NULL;
+	if (get_next_line(fd, &line) > 0)
+	{
+		i = -1;
+		while (++i < 17)
+			if (!ft_strcmp((char*)t[i][0], line))
+				return ((int)t[i][1]);
+	}
+	return (0);
 }
 
 int					main(int argc, char **argv)
@@ -93,8 +88,11 @@ int					main(int argc, char **argv)
 	env.s[0].last = &env.node_head[env.s[0].size - 1];
 	if (test_sort(&env))
 		exit(_(ft_printf("OK\n"), 0));
+	if (env.verbose)
+		verbose(&env, VV);
 	while ((act = get_code(env.actions)) > 0)
-		action(&env, act);
+		if (action(&env, act))
+			exit(_(ft_printf("Error\n"), 0));
 	if (act == -1)
 		ft_printf("Error\n");
 	else

@@ -6,7 +6,7 @@
 /*   By: hmartzol <hmartzol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/19 23:42:11 by hmartzol          #+#    #+#             */
-/*   Updated: 2018/01/21 01:20:01 by hmartzol         ###   ########.fr       */
+/*   Updated: 2018/01/21 04:06:44 by hmartzol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,13 @@ typedef struct			s_ps_env
 ** src/actions.c
 */
 
-void					action(t_ps_env *e, t_actions act);
+int						action(t_ps_env *e, t_actions act);
+
+/*
+** src/label.c
+*/
+
+const char				*label(t_actions act);
 
 /*
 ** src/read_args.c
@@ -96,5 +102,11 @@ int						read_args(int argc, char **argv, t_ps_env *e);
 */
 
 int						test_sort(t_ps_env *env);
+
+/*
+** src/verbose.c
+*/
+
+void					verbose(t_ps_env *e, t_actions act);
 
 #endif

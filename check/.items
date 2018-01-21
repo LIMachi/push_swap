@@ -1,7 +1,0 @@
-ITEMS = src/action \
-	src/checker \
-	src/push_swap \
-	src/test \
-	src/verbose \
-	src/env \
-	src/print_action

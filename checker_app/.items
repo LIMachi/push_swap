@@ -1,4 +1,6 @@
 ITEMS = 	action \
 	main \
 	read_args \
-	test_sort
+	test_sort \
+	verbose \
+	label
